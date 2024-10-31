@@ -37,9 +37,9 @@ export async function removeData(key: string): Promise<void> {
 // Helper function to initialize some sample data
 export async function initializeSampleData(): Promise<void> {
   const sampleCourses = [
-    { id: '1', title: 'Introduction to React', category: 'Web Development', teacherId: 'teacher1' },
-    { id: '2', title: 'Advanced JavaScript', category: 'Programming', teacherId: 'teacher1' },
-    { id: '3', title: 'Data Structures and Algorithms', category: 'Computer Science', teacherId: 'teacher2' },
+    { id: '1', title: 'A Beginner Gardener\'s Guide', category: 'Gardening', teacherId: 'teacher1' },
+    { id: '2', title: 'A Crash Course in Programming', category: 'Programming', teacherId: 'teacher1' },
+    { id: '3', title: 'Baking up a storm in the kitchen', category: 'Baking', teacherId: 'teacher2' },
   ]
 
   const sampleUsers = [
