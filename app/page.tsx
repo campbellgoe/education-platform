@@ -1,11 +1,26 @@
-import { EducationPlatformComponent } from "@/components/education-platform";
-// import Image from "next/image";
+'use client'
 
-export default function Home() {
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+
+export default function Page() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <EducationPlatformComponent />
+    <div className="flex flex-col items-center justify-center min-h-screen py-2">
+      <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
+        <h1 className="text-6xl font-bold">
+          Welcome to our Education Platform
+        </h1>
+        <p className="mt-3 text-2xl">
+          Learn or teach, the choice is yours!
+        </p>
+        <div className="flex mt-6">
+          <Link href="/login" className="mr-4">
+            <Button>Login</Button>
+          </Link>
+          <Link href="/register">
+            <Button variant="outline">Register</Button>
+          </Link>
+        </div>
       </main>
     </div>
   )
