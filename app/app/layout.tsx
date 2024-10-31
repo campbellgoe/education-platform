@@ -1,6 +1,6 @@
 
 import type { Metadata } from 'next'
-import NavBarMain from '@/components/NavBarMain'
+
 
 export const metadata: Metadata = {
   title: 'Education Platform App',
@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <>
-    <NavBarMain />
+    {/* Add logo here for /app layout */}
     {children}
     </>
   )
