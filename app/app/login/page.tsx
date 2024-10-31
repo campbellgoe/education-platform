@@ -35,7 +35,7 @@ export default function Login() {
 
   return <>{
     user ? null : (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-yellow-300">
       <NavBarMain type={undefined}/>
       <div className="p-6 bg-white rounded shadow-md w-96">
         <h1 className="text-2xl font-bold mb-4">Login</h1>

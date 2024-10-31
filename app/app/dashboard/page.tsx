@@ -23,7 +23,7 @@ export default function Dashboard() {
 
   return (
     <div>
-      <NavBarMain type="header" />
+      <NavBarMain type="header" className="bg-yellow-300"/>
       {user.type === 'student' ? <StudentDashboard /> : user.type === 'teacher' ? <TeacherDashboard /> : 'Unknown type of user ('+user.type+').'}
     </div>
   )

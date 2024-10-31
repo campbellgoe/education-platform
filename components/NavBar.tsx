@@ -6,13 +6,13 @@ import Link from 'next/link'
 function capitaliseFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
-function NavBar({ pathname, user, logout, type,  }: { pathname: string, user: User | null, logout: any, type: 'header' | undefined }) {
+function NavBar({ pathname, user, logout, type, className = "" }: { pathname: string, user: User | null, logout: any, type: 'header' | undefined, className: string }) {
   return (
     pathname === '/app' ? null : 
     <nav className={clsx("flex justify-evenly text-3xl shadow-md", {
       "flex-col": type !== 'header',
-    })}>
-      {user ? <Link href="/app" className={cn({
+    }, className)}>
+      {user ? <Link href="/app/dashboard" className={cn({
         "underline": pathname === "/app/dashboard"
       })}>{capitaliseFirstLetter(user.type)} Dashboard</Link> : <>
       <Link href="/app" className={cn({
