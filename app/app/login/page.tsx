@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -12,7 +12,13 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const router = useRouter()
-  const { login } = useAppContext()
+  const { user, login, logout } = useAppContext()
+  useEffect(() => {
+    if(user){
+      router.push('/app/dashboard')
+    }
+  }, [user, router])
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -20,13 +26,14 @@ export default function Login() {
 
     const success = await login(email)
     if (success) {
-      router.push('/dashboard')
+      router.push('/app/dashboard')
     } else {
       setError('Invalid email or password')
     }
   }
 
-  return (
+  return <>{
+    user ? null : (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="p-6 bg-white rounded shadow-md w-96">
         <h1 className="text-2xl font-bold mb-4">Login</h1>
@@ -56,5 +63,5 @@ export default function Login() {
         </form>
       </div>
     </div>
-  )
+  )}</>
 }

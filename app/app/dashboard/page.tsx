@@ -7,12 +7,12 @@ import StudentDashboard from '@/components/StudentDashboard'
 import TeacherDashboard from '@/components/TeacherDashboard'
 
 export default function Dashboard() {
-  const { user } = useAppContext()
+  const { user, logout } = useAppContext()
   const router = useRouter()
 
   useEffect(() => {
     if (!user) {
-      router.push('/login')
+      router.push('/app/login')
     }
   }, [user, router])
 

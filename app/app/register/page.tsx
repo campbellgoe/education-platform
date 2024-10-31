@@ -5,12 +5,13 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-
+import NavBar from '@/components/NavBar'
+import { useAppContext } from '@/contexts/PersistentAppContext'
 export default function Page() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [userType, setUserType] = useState('student')
-
+  const { user, logout } = useAppContext()
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // TODO: Implement registration logic
@@ -18,6 +19,7 @@ export default function Page() {
   }
 
   return (
+    <>
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="p-6 bg-white rounded shadow-md w-96">
         <h1 className="text-2xl font-bold mb-4">Register</h1>
@@ -59,5 +61,6 @@ export default function Page() {
         </form>
       </div>
     </div>
+    </>
   )
 }

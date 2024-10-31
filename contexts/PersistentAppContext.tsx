@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { getData, setData } from '@/lib/datasource'
 
-type User = {
+export type User = {
   id: string
   email: string
   type: 'student' | 'teacher'
