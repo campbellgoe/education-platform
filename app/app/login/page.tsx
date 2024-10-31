@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAppContext } from '@/contexts/PersistentAppContext'
+import NavBarMain from '@/components/NavBarMain'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -34,7 +35,8 @@ export default function Login() {
 
   return <>{
     user ? null : (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-yellow-300">
+      <NavBarMain type={undefined}/>
       <div className="p-6 bg-white rounded shadow-md w-96">
         <h1 className="text-2xl font-bold mb-4">Login</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
