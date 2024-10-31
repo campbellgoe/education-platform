@@ -13,7 +13,7 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const router = useRouter()
-  const { user, login, logout } = useAppContext()
+  const { user, login } = useAppContext()
   useEffect(() => {
     if(user){
       router.push('/app/dashboard')

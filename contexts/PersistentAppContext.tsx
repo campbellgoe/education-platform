@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { getData, setData } from '@/lib/datasource'
 
-export type User = {
+type User = {
   id: string
   email: string
   type: 'student' | 'teacher'
@@ -16,7 +16,7 @@ type Course = {
   teacherId: string
 }
 
-type AppContextType = {
+export type AppContextType = {
   user: User | null
   courses: Course[]
   setUser: (user: User | null) => void

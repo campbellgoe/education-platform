@@ -8,7 +8,7 @@ import TeacherDashboard from '@/components/TeacherDashboard'
 import NavBarMain from '@/components/NavBarMain'
 
 export default function Dashboard() {
-  const { user, logout } = useAppContext()
+  const { user } = useAppContext()
   const router = useRouter()
 
   useEffect(() => {

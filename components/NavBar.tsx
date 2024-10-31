@@ -1,12 +1,12 @@
 "use client"
-import type { User } from '@/contexts/PersistentAppContext'
+import type { AppContextType } from '@/contexts/PersistentAppContext'
 import { cn } from '@/lib/utils'
 import clsx from 'clsx'
 import Link from 'next/link'
 function capitaliseFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
-function NavBar({ pathname, user, logout, type, className = "" }: { pathname: string, user: User | null, logout: any, type: 'header' | undefined, className: string }) {
+function NavBar({ pathname, user, logout, type, className = "" }: { pathname: string, user: AppContextType["user"] | null, logout: (() => void), type?: 'header', className?: string }) {
   return (
     pathname === '/app' ? null : 
     <nav className={clsx("flex justify-evenly text-3xl shadow-md", {

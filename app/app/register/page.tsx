@@ -12,7 +12,7 @@ export default function Page() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [userType, setUserType] = useState('student')
-  const { user, logout, login } = useAppContext()
+  const { login } = useAppContext()
   const router = useRouter()
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
