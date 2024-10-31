@@ -7,15 +7,20 @@ import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useAppContext } from '@/contexts/PersistentAppContext'
 import NavBarMain from '@/components/NavBarMain'
+import { useRouter } from 'next/navigation'
 export default function Page() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [userType, setUserType] = useState('student')
-  const { user, logout } = useAppContext()
+  const { user, logout, login } = useAppContext()
+  const router = useRouter()
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // TODO: Implement registration logic
     console.log('Registration attempt', { email, password, userType })
+    alert("Not accepting registrations yet. Login with student@example.com or teacher1@example.com to preview your dashboard (logging you in as a student)")
+    login("student@example.com")
+    router.push('/app/dashboard')
   }
 
   return (
