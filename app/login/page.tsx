@@ -5,25 +5,22 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { getData, setData } from '@/lib/datasource'
-type User = { id: string; email: string; type: string }
-export default function Page() {
+import { useAppContext } from '@/contexts/PersistentAppContext'
+
+export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const router = useRouter()
+  const { login } = useAppContext()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
 
-    const users = await getData<Array<User>>('users')
-    const user = users?.find((u: User) => u.email === email)
-
-    if (user) {
-      // In a real app, you'd check the password here
-      await setData('currentUser', user)
-      router.push(user.type === 'student' ? '/student' : '/teacher')
+    const success = await login(email)
+    if (success) {
+      router.push('/dashboard')
     } else {
       setError('Invalid email or password')
     }
