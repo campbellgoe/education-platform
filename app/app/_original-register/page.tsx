@@ -1,34 +1,57 @@
+// app/register/page.tsx
 'use client'
 
-import { useState } from 'react'
+import { useState, FormEvent } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { useAppContext } from '@/contexts/PersistentAppContext'
 import NavBarMain from '@/components/NavBarMain'
-import { useRouter } from 'next/navigation'
-export default function Page() {
+
+type UserType = 'student' | 'teacher';
+
+export default function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [userType, setUserType] = useState('student')
-  const { login } = useAppContext()
+  const [userType, setUserType] = useState<UserType>('student')
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const handleSubmit = (e: React.FormEvent) => {
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // TODO: Implement registration logic
-    console.log('Registration attempt', { email, password, userType })
-    alert("Not accepting registrations yet. Login with student@example.com or teacher1@example.com to preview your dashboard (logging you in as a "+userType+")")
-    login(userType === 'student' ? "student@example.com" : 'teacher1@example.com')
-    router.push('/app/dashboard')
+    setError('')
+    setIsLoading(true)
+
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, type: userType }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        router.push('/login')
+      } else {
+        setError(data.message || 'Registration failed')
+      }
+    } catch (error) {
+      console.error('An error occurred during registration:', error)
+      setError('An error occurred during registration')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
-    <>
     <div className="flex items-center justify-center min-h-screen bg-yellow-300">
       <NavBarMain type={undefined}/>
       <div className="p-6 bg-white rounded shadow-md w-96">
         <h1 className="text-2xl font-bold mb-4">Register</h1>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <Label htmlFor="email">Email</Label>
@@ -48,11 +71,12 @@ export default function Page() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              minLength={6}
             />
           </div>
           <div className="mb-6">
             <Label>User Type</Label>
-            <RadioGroup value={userType} onValueChange={setUserType}>
+            <RadioGroup value={userType} onValueChange={(value: UserType) => setUserType(value)}>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="student" id="student" />
                 <Label htmlFor="student">Student</Label>
@@ -63,10 +87,11 @@ export default function Page() {
               </div>
             </RadioGroup>
           </div>
-          <Button type="submit" className="w-full">Register</Button>
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? 'Registering...' : 'Register'}
+          </Button>
         </form>
       </div>
     </div>
-    </>
   )
 }

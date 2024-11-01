@@ -1,0 +1,49 @@
+// models/User.ts
+import mongoose, { Document, Model } from 'mongoose';
+
+interface IUser extends Document {
+  email: string;
+  password: string;
+  type: 'student' | 'teacher';
+  enrolledCourses: mongoose.Types.ObjectId[];
+}
+
+const UserSchema = new mongoose.Schema<IUser>({
+  email: {
+    type: String,
+    required: [true, 'Please provide an email'],
+    unique: true,
+    trim: true,
+    lowercase: true,
+    match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email address'],
+  },
+  password: {
+    type: String,
+    required: [true, 'Please provide a password'],
+    minlength: [6, 'Password should be at least 6 characters long'],
+  },
+  type: {
+    type: String,
+    enum: ['student', 'teacher'],
+    required: [true, 'Please specify user type'],
+  },
+  enrolledCourses: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Course',
+  }],
+}, {
+  timestamps: true,
+});
+
+// Add any pre-save hooks, methods, or statics here
+UserSchema.pre('save', async function(next) {
+  if (this.isModified('password')) {
+    const bcrypt = await import('bcryptjs');
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+  next();
+});
+
+const User: Model<IUser> = mongoose.models.User || mongoose.model<IUser>('User', UserSchema);
+
+export default User;

@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 import { getData, setData } from '@/lib/datasource'
 
 type User = {
+  password: string
   id: string
   email: string
   type: 'student' | 'teacher'
@@ -21,7 +22,7 @@ export type AppContextType = {
   courses: Course[]
   setUser: (user: User | null) => void
   setCourses: (courses: Course[]) => void
-  login: (email: string) => Promise<boolean>
+  login: (email: string, password: string) => Promise<boolean>
   logout: () => void
 }
 
@@ -41,9 +42,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     initializeData()
   }, [])
 
-  const login = async (email: string): Promise<boolean> => {
+  const login = async (email: string, password: string): Promise<boolean> => {
     const users = await getData<User[]>('users')
-    const foundUser = users?.find(u => u.email === email)
+    const foundUser = users?.find(u => u.email === email && u.password === password)
     if (foundUser) {
       setUser(foundUser)
       await setData('currentUser', foundUser)
