@@ -25,7 +25,7 @@ export default function ForgotPassword() {
       const result = await forgotPassword(formData)
       setMessage(result.message)
       if (result.success) {
-        setTimeout(() => router.push('/login'), 3000)
+        setTimeout(() => router.push('/app/login'), 3000)
       }
     } catch (error: any) {
       setMessage('An error occurred. Please try again. '+error.message)
@@ -63,7 +63,7 @@ export default function ForgotPassword() {
             </Button>
           </form>
           <div className="mt-4 text-center">
-            <Button variant="link" onClick={() => router.push('/login')}>
+            <Button variant="link" onClick={() => router.push('/app/login')}>
               Back to Login
             </Button>
           </div>
