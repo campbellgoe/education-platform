@@ -14,8 +14,8 @@ export async function forgotPassword(formData: FormData) {
       interval: 60, // 60 seconds
     });
     await bucket.throttle();
-  } catch (err) {
-    throw 'Rate limit exceeded, try again in a moment.'
+  } catch (err:any) {
+    throw 'Rate limit exceeded, try again in a moment. '+err.message
   }
   await dbConnect()
   const email = formData.get('email') as string
