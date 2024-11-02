@@ -5,8 +5,18 @@ import User from '@/models/User'
 import { PasswordReset } from '@/models/PasswordReset'
 import { sendPasswordResetEmail } from './sendEmail'
 import dbConnect from '@/lib/dbConnect'
+import LeakyBucket from 'leaky-bucket';
 
 export async function forgotPassword(formData: FormData) {
+  try {
+    const bucket = new LeakyBucket({
+      capacity: 10,
+      interval: 60, // 60 seconds
+    });
+    await bucket.throttle();
+  } catch (err) {
+    throw 'Rate limit exceeded, try again in a moment.'
+  }
   await dbConnect()
   const email = formData.get('email') as string
 

@@ -1,4 +1,5 @@
 // import 'bootstrap/dist/css/bootstrap.min.css';
+import CaptchaProvider from '@/components/CaptchaProvider';
 import './globals.css';
 
 export const metadata = {
@@ -11,8 +12,9 @@ function Layout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en">
             <body>
-                {children}
-
+                <CaptchaProvider>
+                    {children}
+                </CaptchaProvider>
                 {/* credits */}
                 <div className="text-center mt-4">
                     <p>

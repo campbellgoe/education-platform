@@ -14,12 +14,16 @@ async function sendEmailReally(mailOptions: any, authPass: string) {
   let response;
   try {
     
-    // a leaky bucket, that will burst 5 items, then will throttle the items to one per hour
-    const bucket = new LeakyBucket({
-      capacity: 4,
-      interval: 60*60, // 60 seconds * 60 minutes
-    });
-    await bucket.throttle();
+    // a leaky bucket, that will burst 10 items, then will throttle the items to one per minute
+    try {
+      const bucket = new LeakyBucket({
+        capacity: 10,
+        interval: 60, // 60 seconds
+      });
+      await bucket.throttle();
+    } catch (err) {
+      throw 'Rate limit exceeded, try again in a moment.'
+    }
     const url = emailApiUrl + '/v1/emails'
     console.log(url)
     console.log(mailOptions)
@@ -49,15 +53,22 @@ async function sendEmailReally(mailOptions: any, authPass: string) {
     }
   }
 }
+
 export async function sendPasswordResetEmail(prevState: any, formData: FormData) {
   await dbConnect()
-  // const captchaToken = formData.get('captchaToken')?.toString()
+  const captchaToken = formData.get('captchaToken')?.toString()
   const email = formData.get('email')?.toString()
   const user = await User.findOne({ email })
   if(!user){
     throw 'No user found with this email address.'
   }
-  if (email) {
+  if (email && captchaToken) {
+    const captchaValidationResponse = await validateCaptcha(captchaToken);
+    if (
+      captchaValidationResponse &&
+      captchaValidationResponse.success &&
+      captchaValidationResponse.score > 0.5
+    ) {
     const emailTo = email;
     const emailFrom = process.env.EMAIL_RESET_FROM;
     const authPass = process.env.EMAIL_RESET_PASS || ''
@@ -79,35 +90,39 @@ export async function sendPasswordResetEmail(prevState: any, formData: FormData)
     const sentResponse = await sendEmailReally(mailOptions, authPass)
     return sentResponse
   
+    } else {
+      throw "Failed to validate captcha"
+    }
   }
   throw "Failed to send password reset email"
+
 }
 
-// async function validateCaptcha(captchaToken: string) {
-//   try {
-//     // Verify that both captchaToken and MASSLESS_RECAPTCHA_SECRET_KEY were set.
-//     if (captchaToken && process.env.MASSLESS_RECAPTCHA_SECRET_KEY) {
-//       console.log("Validating captcha...");
-//       // Validate captcha.
-//       const response = await fetch(
-//         `https://www.google.com/recaptcha/api/siteverify?${new URLSearchParams({
-//           secret: process.env.MASSLESS_RECAPTCHA_SECRET_KEY,
-//           response: captchaToken,
-//         })}`,
-//         {
-//           method: "POST",
-//         }
-//       );
+async function validateCaptcha(captchaToken: string) {
+  try {
+    // Verify that both captchaToken and MASSLESS_RECAPTCHA_SECRET_KEY were set.
+    if (captchaToken && process.env.MASSLESS_RECAPTCHA_SECRET_KEY) {
+      console.log("Validating captcha...");
+      // Validate captcha.
+      const response = await fetch(
+        `https://www.google.com/recaptcha/api/siteverify?${new URLSearchParams({
+          secret: process.env.MASSLESS_RECAPTCHA_SECRET_KEY,
+          response: captchaToken,
+        })}`,
+        {
+          method: "POST",
+        }
+      );
 
-//       return response.json();
-//     } else {
-//       // Show in the console if needed values are not set.
-//       console.log(
-//         "captchaToken or RECAPTCHA_SECRET_KEY not set. Captcha could not be validated"
-//       );
-//     }
-//   } catch (err) {
-//     console.error("Failed to validate captcha", err);
-//   }
-//   return null
-// }
+      return response.json();
+    } else {
+      // Show in the console if needed values are not set.
+      console.log(
+        "captchaToken or RECAPTCHA_SECRET_KEY not set. Captcha could not be validated"
+      );
+    }
+  } catch (err) {
+    console.error("Failed to validate captcha", err);
+  }
+  return null
+}
