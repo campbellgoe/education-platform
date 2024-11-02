@@ -26,7 +26,7 @@ export default function Dashboard() {
    }
    fetchAllCourses()
    .then(() => console.log('Courses fetched'))
-  }, [user])
+  }, [user, setCourses])
   return (
     <div>
       <NavBarMain type="header" className="bg-yellow-300"/>
