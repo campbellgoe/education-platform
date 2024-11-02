@@ -3,7 +3,7 @@ import CaptchaProvider from '@/components/CaptchaProvider';
 import './globals.css';
 
 export const metadata = {
-    title: 'Next.js 13 - User Registration and Login Example'
+    title: 'Learn anything, together'
 }
 
 export default Layout;
