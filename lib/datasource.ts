@@ -43,9 +43,9 @@ export async function initializeSampleData(): Promise<void> {
   ]
 
   const sampleUsers = [
-    { id: 'student1', email: 'student@example.com', type: 'student', enrolledCourses: ['1'] },
-    { id: 'teacher1', email: 'teacher1@example.com', type: 'teacher', courses: ['1', '2'] },
-    { id: 'teacher2', email: 'teacher2@example.com', type: 'teacher', courses: ['3'] },
+    { id: 'student1', email: 'student@example.com', password: 'StudentEarly', type: 'student', enrolledCourses: ['1'] },
+    { id: 'teacher1', email: 'teacher1@example.com', password: 'TeacherHappy',type: 'teacher', courses: ['1', '2'] },
+    { id: 'teacher2', email: 'teacher2@example.com', password: 'TeacherSad', type: 'teacher', courses: ['3'] },
   ]
 
   await setData('courses', sampleCourses)
