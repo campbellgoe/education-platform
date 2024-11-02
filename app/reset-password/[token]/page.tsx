@@ -36,7 +36,7 @@ export default function ResetPassword({ params }: any) {
       setMessage(result.message)
 
       if (result.success) {
-        setTimeout(() => router.push('/login'), 3000)
+        setTimeout(() => router.push('/app/login'), 3000)
       }
     } catch (error: any) {
       setMessage('An error occurred. Please try again. ' + error.message)
