@@ -37,7 +37,7 @@ try {
       content,
       teacherId,
       authorName,
-      slug: title.toLowerCase().replace(/ /g, '-'),
+      slug: encodeURIComponent(title.toLowerCase().replace(/ /g, '-')),
     })
 
     await newCourse.save()
