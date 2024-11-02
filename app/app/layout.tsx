@@ -1,21 +1,25 @@
+// import 'bootstrap/dist/css/bootstrap.min.css';
+import './globals.css';
 
-import type { Metadata } from 'next'
-
-
-export const metadata: Metadata = {
-  title: 'Education Platform App',
-  description: 'Learn and teach with our innovative education platform',
+export const metadata = {
+    title: 'Next.js 13 - User Registration and Login Example'
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return (
-    <>
-    {/* Add logo here for /app layout */}
-    {children}
-    </>
-  )
+export default Layout;
+
+function Layout({ children }: { children: React.ReactNode }) {
+    return (
+        <html lang="en">
+            <body>
+                {children}
+
+                {/* credits */}
+                <div className="text-center mt-4">
+                    <p>
+                        <a href="https://massless.ltd" target="_blank">MASSLESS LTD.</a>
+                    </p>                    
+                </div>
+            </body>
+        </html>
+    );
 }

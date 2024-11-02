@@ -25,7 +25,7 @@ export default function Login() {
     e.preventDefault()
     setError('')
 
-    const success = await login(email)
+    const success = await login(email, password)
     if (success) {
       router.push('/app/dashboard')
     } else {

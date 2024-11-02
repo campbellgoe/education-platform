@@ -7,7 +7,7 @@ function NavBarMain({ type, className, ...props }: { type?: 'header', className?
   const pathname = usePathname()
   const { user, logout } = useAppContext()
   return (
-    <NavBar user={user} logout={logout} pathname={pathname} type={type} className={className} {...props}/>
+    <NavBar user={user} logout={logout} pathname={pathname || ''} type={type} className={className} {...props}/>
   )
 }
 
