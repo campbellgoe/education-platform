@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAppContext } from '@/contexts/PersistentAppContext'
 import Fuse from 'fuse.js'
+import Link from 'next/link'
 
 export default function StudentDashboard() {
   const { courses } = useAppContext()
@@ -40,10 +41,13 @@ export default function StudentDashboard() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredCourses.map(course => (
-          <div key={course.id} className="border p-4 rounded shadow">
+          <div key={course._id} className="border p-4 rounded shadow">
             <h2 className="text-xl font-semibold">{course.title}</h2>
             <p className="text-gray-600">{course.category}</p>
-            <Button className="mt-2">View Course</Button>
+            <p className="text-gray-700">{course.description}</p>
+            <Link href={"/app/course/"+course.slug}>
+              <Button className="mt-2">View Course</Button>
+            </Link>
           </div>
         ))}
       </div>

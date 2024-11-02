@@ -11,11 +11,14 @@ type User = {
   type: 'student' | 'teacher'
 }
 
-type Course = {
-  id: string
+export type Course = {
+  description: string
+  _id: string
   title: string
   category: string
   teacherId: string
+  slug: string
+  content: string
 }
 
 export type AppContextType = {

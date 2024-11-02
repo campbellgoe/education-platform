@@ -36,6 +36,7 @@ try {
       category,
       content,
       teacherId,
+      slug: title.toLowerCase().replace(/ /g, '-'),
     })
 
     await newCourse.save()
