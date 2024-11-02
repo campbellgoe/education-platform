@@ -24,7 +24,7 @@ export default function CoursePage() {
  
 
   return (
-    <div className="bg-yellow-300 mx-auto w-[40ch] md:w-[60ch] p-4">
+    <div className="rounded shadow-sm bg-yellow-300 mx-auto w-[40ch] md:w-[60ch] p-4">
       <h1>Course Page</h1>
       {course ? (
         <div>
