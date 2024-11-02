@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema<IUser>({
     unique: true,
     trim: true,
     lowercase: true,
-    match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email address'],
+    // match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email address'],
   },
   password: {
     type: String,
@@ -36,13 +36,13 @@ const UserSchema = new mongoose.Schema<IUser>({
 });
 
 // Add any pre-save hooks, methods, or statics here
-UserSchema.pre('save', async function(next) {
-  if (this.isModified('password')) {
-    const bcrypt = await import('bcryptjs');
-    this.password = await bcrypt.hash(this.password, 10);
-  }
-  next();
-});
+// UserSchema.pre('save', async function(next) {
+//   if (this.isModified('password')) {
+//     const bcrypt = await import('bcryptjs');
+//     this.password = await bcrypt.hash(this.password, 10);
+//   }
+//   next();
+// });
 
 const User: Model<IUser> = mongoose.models.User || mongoose.model<IUser>('User', UserSchema);
 

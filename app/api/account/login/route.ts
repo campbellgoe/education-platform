@@ -7,7 +7,6 @@ import dbConnect from '@/lib/dbConnect';
 export async function POST(request: Request): Promise<Response> {
     await dbConnect()
     const body = await request.json();
-    console.log('body:', body)
     const { user, token } = await usersRepo.authenticate(body);
 
     // return jwt token in http only cookie

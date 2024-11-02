@@ -18,11 +18,8 @@ export const usersRepo = {
 
 async function authenticate({ email, password }: { email: string, password: string }) {
     const user = await User.findOne({ email });
-
-    // if
     const isPasswordCorrect = bcrypt.compareSync(password, user?.password || '');
-    if (!isPasswordCorrect) {
-        console.log('password:', password, 'user.hash:', user?.password)
+    if (!user || !isPasswordCorrect) {
         throw 'Email or password is incorrect';
     }
 
@@ -64,7 +61,6 @@ function hashPassword(params: any, user: any){
         if(params.password.length < MIN_PASSWORD_LENGTH) {
             throw MIN_PASSWORD_MESSAGE;
         }
-        console.log('hashing password');
         user.password = bcrypt.hashSync(params.password, 10);
         delete params.password
     }

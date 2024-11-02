@@ -16,8 +16,6 @@ export default function Page() {
   const router = useRouter()
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement registration logic
-    console.log('Registration attempt', { email, password, userType })
     // alert("Not accepting registrations yet. Login with student@example.com or teacher1@example.com to preview your dashboard (logging you in as a "+userType+")")
     // login(userType === 'student' ? "student@example.com" : 'teacher1@example.com', password)
     register(email, password, userType)
