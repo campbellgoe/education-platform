@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation'
 
 type User = {
   password: string
-  id: string
+  _id: string
   email: string
   type: 'student' | 'teacher'
 }
@@ -60,9 +60,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
     return false
   }
+
   const login = async (email: string, password: string): Promise<boolean> => {
-    // const users = await getData<User[]>('users')
-    
     const foundUser = await fetch('/api/account/login', {
       method: 'POST',
       headers: {
@@ -83,9 +82,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setUser(null)
     setData('currentUser', null)
     fetch('/api/account/logout').then(() => {
-      // redirect('/app')
+      redirect('/app')
     })
-    
   }
 
   return (

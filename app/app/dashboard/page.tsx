@@ -8,7 +8,7 @@ import TeacherDashboard from '@/components/TeacherDashboard'
 import NavBarMain from '@/components/NavBarMain'
 
 export default function Dashboard() {
-  const { user } = useAppContext()
+  const { user, setCourses } = useAppContext()
   const router = useRouter()
 
   useEffect(() => {
@@ -17,14 +17,20 @@ export default function Dashboard() {
     }
   }, [user, router])
 
-  if (!user) {
-    return null
-  }
-
+  useEffect(() => {
+    if(!user) return
+   const fetchAllCourses = async () => {
+      const response = await fetch('/api/courses')
+      const {courses} = await response.json()
+      setCourses(courses)
+   }
+   fetchAllCourses()
+   .then(() => console.log('Courses fetched'))
+  }, [user])
   return (
     <div>
       <NavBarMain type="header" className="bg-yellow-300"/>
-      {user.type === 'student' ? <StudentDashboard /> : user.type === 'teacher' ? <TeacherDashboard /> : 'Unknown type of user ('+user.type+').'}
+      {user?.type === 'student' ? <StudentDashboard /> : user?.type === 'teacher' ? <TeacherDashboard /> : 'Loading user...'}
     </div>
   )
 }
