@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAppContext } from '@/contexts/PersistentAppContext'
 import NavBarMain from '@/components/NavBarMain'
+import Link from 'next/link'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -63,6 +64,11 @@ export default function Login() {
           </div>
           <Button type="submit" className="w-full">Login</Button>
         </form>
+        <div className="text-center">
+          <Link href="/forgot-password" className="text-blue-500 hover:underline">
+            Forgot Password?
+          </Link>
+        </div>
       </div>
     </div>
   )}</>

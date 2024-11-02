@@ -8,3 +8,4 @@ export interface MongooseCache {
   conn: Mongoose | null;
   promise: Promise<Mongoose> | null;
 }
+
