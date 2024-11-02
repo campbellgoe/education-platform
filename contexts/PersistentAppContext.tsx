@@ -3,10 +3,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { getData, setData } from '@/lib/datasource'
 import { redirect } from 'next/navigation'
+import { ObjectId } from 'mongoose'
 
-type User = {
+export type User = {
   password: string
-  _id: string
+  _id: string | ObjectId
   email: string
   type: 'student' | 'teacher'
 }
@@ -17,6 +18,7 @@ export type Course = {
   title: string
   category: string
   teacherId: string
+  teacherEmail: string
   slug: string
   content: string
 }

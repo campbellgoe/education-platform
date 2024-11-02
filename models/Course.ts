@@ -28,6 +28,10 @@ const CourseSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  teacherEmail: {
+    type: String,
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
