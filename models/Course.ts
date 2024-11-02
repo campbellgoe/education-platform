@@ -28,7 +28,7 @@ const CourseSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
-  teacherEmail: {
+  authorName: {
     type: String,
     required: true,
   },

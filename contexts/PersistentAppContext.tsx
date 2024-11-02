@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation'
 import { ObjectId } from 'mongoose'
 
 export type User = {
+  name: string,
   password: string
   _id: string | ObjectId
   email: string
@@ -18,7 +19,7 @@ export type Course = {
   title: string
   category: string
   teacherId: string
-  teacherEmail: string
+  authorName: string
   slug: string
   content: string
 }
@@ -30,7 +31,7 @@ export type AppContextType = {
   setCourses: (courses: Course[]) => void
   login: (email: string, password: string) => Promise<boolean>
   logout: () => void,
-  register: (email: string, password: string, userType: string) => Promise<boolean>
+  register: (name: string, email: string, password: string, userType: string) => Promise<boolean>
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined)
@@ -49,13 +50,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     initializeData()
   }, [])
 
-  const register = async (email: string, password: string, userType: string): Promise<any> => {
+  const register = async (name: string, email: string, password: string, userType: string): Promise<boolean> => {
     const newUser = await fetch('/api/account/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email, password, type: userType })
+      body: JSON.stringify({ name, email, password, type: userType })
     }).then(res => res.json())
 
     if(newUser){

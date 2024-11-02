@@ -29,7 +29,7 @@ console.log('user:', user)
       category,
       content,
       teacherId: user._id,
-      teacherEmail: user.email,
+      authorName: user.name || 'Unknown',
     }
 
     const response = await fetch('/api/courses', {

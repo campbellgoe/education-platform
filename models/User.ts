@@ -3,6 +3,7 @@ import mongoose, { Document, Model } from 'mongoose';
 
 export interface IUser extends Document {
   _id: mongoose.Types.ObjectId;
+  name: string;
   email: string;
   password: string;
   type: 'student' | 'teacher';
@@ -10,6 +11,11 @@ export interface IUser extends Document {
 }
 
 const UserSchema = new mongoose.Schema<IUser>({
+  name: {
+    type: String,
+    required: [true, 'Please provide a name'],
+    trim: true,
+  },
   email: {
     type: String,
     required: [true, 'Please provide an email'],

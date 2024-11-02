@@ -19,7 +19,7 @@ export async function GET() {
 }
 export async function POST(request: Request) {
   try {
-    const { title, description, category, content, teacherId, teacherEmail} = await request.json()
+    const { title, description, category, content, teacherId, authorName} = await request.json()
 console.log('title:', title, 'description:', description, 'category:', category, 'content:', content, 'teacherId:', teacherId)
     
 try {
@@ -36,7 +36,7 @@ try {
       category,
       content,
       teacherId,
-      teacherEmail,
+      authorName,
       slug: title.toLowerCase().replace(/ /g, '-'),
     })
 

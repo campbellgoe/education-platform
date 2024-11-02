@@ -28,7 +28,7 @@ export default function CoursePage() {
       <h1>Course Page</h1>
       {course ? (
         <div>
-          <h2>Author contact: {course.teacherEmail}</h2>
+          <h2>Author: {course.authorName}</h2>
           <h2>{course.title}</h2>
           <p>{course.description}</p>
           <p>{course.category}</p>

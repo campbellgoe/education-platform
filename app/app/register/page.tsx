@@ -9,6 +9,7 @@ import { useAppContext } from '@/contexts/PersistentAppContext'
 import NavBarMain from '@/components/NavBarMain'
 import { useRouter } from 'next/navigation'
 export default function Page() {
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -27,7 +28,7 @@ export default function Page() {
     // alert("Not accepting registrations yet. Login with student@example.com or teacher1@example.com to preview your dashboard (logging you in as a "+userType+")")
     // login(userType === 'student' ? "student@example.com" : 'teacher1@example.com', password)
     try {
-      register(email, password, userType)
+      register(name, email, password, userType)
       router.push('/app/dashboard')
     } catch(err: any){
       setError(err.message)
@@ -43,7 +44,17 @@ export default function Page() {
         <h1 className="text-2xl font-bold mb-4">Register</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+        <div className="mb-4">
+            <Label htmlFor="name">Name</Label>
+            <Input
+              type="name"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+        <div className="mb-4">
             <Label htmlFor="email">Email</Label>
             <Input
               type="email"
