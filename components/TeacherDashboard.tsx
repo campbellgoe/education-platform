@@ -3,16 +3,16 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { useAppContext } from '@/contexts/PersistentAppContext'
+import { useEffect } from 'react'
 
 export default function TeacherDashboard() {
-  const { user, courses } = useAppContext()
-
-  const teacherCourses = courses.filter(course => course.teacherId === user?.id)
+  const { courses, user } = useAppContext()
+  const teacherCourses = courses?.filter(course => course.teacherId === user?._id)
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Teacher Dashboard</h1>
-      <Link href="/create-course">
+      <Link href="/app/create">
         <Button>Create New Course</Button>
       </Link>
       <div className="mt-6">
