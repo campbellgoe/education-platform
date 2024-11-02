@@ -14,10 +14,10 @@ export default function Page() {
           Learn or teach, the choice is yours!
         </p>
         <div className="flex mt-6">
-          <Link href="/app/account/login" className="mr-4">
+          <Link href="/app/login" className="mr-4">
             <Button>Login</Button>
           </Link>
-          <Link href="/app/account/register">
+          <Link href="/app/register">
             <Button variant="outline">Register</Button>
           </Link>
         </div>

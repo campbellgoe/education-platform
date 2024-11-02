@@ -1,11 +1,7 @@
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-import { apiHandler } from '@/app/_helpers/server/api/api-handler';
-
-module.exports = apiHandler({
-    POST: logout
-});
-
-async function logout() {
+export async function GET(){
     (await cookies()).delete('authorization');
+    return redirect('/app');
 }

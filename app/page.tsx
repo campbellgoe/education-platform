@@ -8,7 +8,7 @@ export default function Page() {
   const router = useRouter()
   useEffect(() => {
     router.push('/app')
-  }, [])
+  }, [router])
   return (
     <Link href="/app">App</Link>
   )

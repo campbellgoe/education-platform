@@ -1,10 +1,8 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { headers } from 'next/headers';
-import { db } from './db';
 import { MIN_PASSWORD_LENGTH, MIN_PASSWORD_MESSAGE } from '@/app/_helpers/shared/config';
-
-const User = db.User;
+import User from '@/models/User';
 
 export const usersRepo = {
     authenticate,
@@ -18,18 +16,21 @@ export const usersRepo = {
     delete: _delete
 };
 
-async function authenticate({ username, password }: { username: string, password: string }) {
-    const user = await User.findOne({ username });
+async function authenticate({ email, password }: { email: string, password: string }) {
+    const user = await User.findOne({ email });
 
-    if (!(user && bcrypt.compareSync(password, user.hash))) {
-        throw 'Username or password is incorrect';
+    // if
+    const isPasswordCorrect = bcrypt.compareSync(password, user?.password || '');
+    if (!isPasswordCorrect) {
+        console.log('password:', password, 'user.hash:', user?.password)
+        throw 'Email or password is incorrect';
     }
 
     // create a jwt token that is valid for 4 days
-    const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET!, { expiresIn: '4d' });
+    const token = jwt.sign({ sub: user?.id }, process.env.JWT_SECRET!, { expiresIn: '4d' });
 
     return {
-        user: user.toJSON(),
+        user: user?.toJSON(),
         token
     };
 }
@@ -63,15 +64,16 @@ function hashPassword(params: any, user: any){
         if(params.password.length < MIN_PASSWORD_LENGTH) {
             throw MIN_PASSWORD_MESSAGE;
         }
-        user.hash = bcrypt.hashSync(params.password, 10);
+        console.log('hashing password');
+        user.password = bcrypt.hashSync(params.password, 10);
         delete params.password
     }
 }
 
 async function create(params: any) {
     // validate
-    if (await User.findOne({ username: params.username })) {
-        throw 'Username "' + params.username + '" is already taken';
+    if (await User.findOne({ email: params.email })) {
+        throw 'Email "' + params.email + '" is already taken';
     }
 
     const user = new User(params);
@@ -80,16 +82,17 @@ async function create(params: any) {
     hashPassword(params, user);
     // save user
     await user.save();
+    return user
 }
 
-// update a user by id with an object of user properties including username, password etc.
+// update a user by id with an object of user properties including email, password etc.
 async function update(id: string, params: any) {
     const user = await User.findById(id);
 
     // validate
     if (!user) throw 'User not found';
-    if (user.username !== params.username && await User.findOne({ username: params.username })) {
-        throw 'Username "' + params.username + '" is already taken';
+    if (user.email !== params.email && await User.findOne({ email: params.email })) {
+        throw 'Email "' + params.email + '" is already taken';
     }
 
     // hash password

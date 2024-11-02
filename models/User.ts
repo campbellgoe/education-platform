@@ -1,7 +1,7 @@
 // models/User.ts
 import mongoose, { Document, Model } from 'mongoose';
 
-interface IUser extends Document {
+export interface IUser extends Document {
   email: string;
   password: string;
   type: 'student' | 'teacher';
