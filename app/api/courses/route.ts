@@ -1,7 +1,7 @@
 
 import { Course } from '@/models/Course'
 import dbConnect from '@/lib/dbConnect'
-export async function GET(request: Request) {
+export async function GET() {
   try {
     await dbConnect()
   } catch(err){

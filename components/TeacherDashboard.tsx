@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { useAppContext } from '@/contexts/PersistentAppContext'
-import { useEffect } from 'react'
 
 export default function TeacherDashboard() {
   const { courses, user } = useAppContext()
