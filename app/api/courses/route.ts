@@ -1,6 +1,7 @@
 
 import { Course } from '@/models/Course'
 import dbConnect from '@/lib/dbConnect'
+import { slugify } from '@/utils/slugify'
 export async function GET() {
   try {
     await dbConnect()
@@ -37,7 +38,7 @@ try {
       content,
       teacherId,
       authorName,
-      slug: encodeURIComponent(title.toLowerCase().replace(/ /g, '-')),
+      slug: slugify(title),
     })
 
     await newCourse.save()

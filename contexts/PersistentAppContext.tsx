@@ -22,6 +22,7 @@ export type Course = {
   authorName: string
   slug: string
   content: string
+  updatedAt: string
 }
 
 export type AppContextType = {
