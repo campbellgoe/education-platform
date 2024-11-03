@@ -1,9 +1,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { MDXRemote } from 'next-mdx-remote/rsc'
-// import { highlight } from 'sugar-high'
+import { highlight } from 'sugar-high'
 import React from 'react'
 import { slugify } from '@/utils/slugify';
+import './mdx.css'
 
 function Table({ data }: { data: { headers: string[]; rows: string[][] } }) {
   const headers = data.headers.map((header: any, index: number) => (
@@ -50,10 +51,10 @@ function RoundedImage(props: any) {
   return <Image alt={props.alt} className="rounded-lg" {...props} />
 }
 
-// function Code({ children, ...props }: any) {
-//   let codeHTML = highlight(children)
-//   return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />
-// }
+function Code({ children, ...props }: any) {
+  let codeHTML = highlight(children)
+  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />
+}
 
 
 
@@ -88,7 +89,7 @@ const components = {
   h6: createHeading(6),
   Image: RoundedImage,
   a: CustomLink,
-  // code: Code,
+  code: Code,
   Table,
 }
 
