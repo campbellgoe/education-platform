@@ -4,6 +4,8 @@ import { formatDate } from '@/utils/parse-mdx'
 import { baseUrl } from '@/app/_helpers/shared/config'
 import dbConnect from '@/lib/dbConnect'
 import { Course } from '@/models/Course'
+import NavBarMain from '@/components/NavBarMain'
+import { textColorBasedOnBackgroundHexadecimal } from '@/lib/utils'
 const getCourses = async () => {
   await dbConnect()
   const courses = await Course.find()
@@ -58,16 +60,24 @@ const { title, description, image } = course
   }
 }
 
-export default async function Blog({ params }: any) {
+export default async function Blog({ params,
+  searchParams,
+}: {
+  params: any,
+  searchParams: any
+}) {
+  const bgColour  = (await searchParams).bgColour || 'ffcc00'
   const { slug } = await params
   const course = (await getCourses()).find((course) => course.slug === slug)
 
   if (!course) {
     notFound()
   }
-
+  const backgroundColor = bgColour ? '#'+bgColour : '#ffffff'
   return (
-    <section>
+    <main style={{ backgroundColor, color: textColorBasedOnBackgroundHexadecimal(backgroundColor) }}>
+      <NavBarMain type="header" />
+    <section >
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -94,13 +104,17 @@ export default async function Blog({ params }: any) {
         {course.title}
       </h1>
       <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="text-sm">
           {formatDate(course.updatedAt.toString())}
+        </p>
+        <p className="text-sm">
+          By {course.authorName}
         </p>
       </div>
       <article className="prose">
         <CustomMDX source={course.content} />
       </article>
     </section>
+    </main>
   )
 }

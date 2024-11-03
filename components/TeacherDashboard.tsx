@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { useAppContext } from '@/contexts/PersistentAppContext'
 
 export default function TeacherDashboard() {
-  const { courses, user } = useAppContext()
+  const { courses, user, userClientSettings } = useAppContext()
   const teacherCourses = courses?.filter(course => course.teacherId === user?._id)
 
   return (
@@ -21,7 +21,7 @@ export default function TeacherDashboard() {
             <div key={course._id} className="border p-4 rounded shadow">
               <h3 className="text-lg font-semibold">{course.title}</h3>
               <p className="text-gray-600">{course.category}</p>
-              <Link href={"/app/course/"+course.slug}>
+              <Link href={"/app/course/"+course.slug+'?bgColour='+userClientSettings.backgroundColourHex.slice(1)}>
                 <Button className="mt-2">Edit Course</Button>
               </Link>
             </div>

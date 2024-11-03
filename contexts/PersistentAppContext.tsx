@@ -33,6 +33,8 @@ export type AppContextType = {
   login: (email: string, password: string) => Promise<boolean>
   logout: () => void,
   register: (name: string, email: string, password: string, userType: string) => Promise<boolean>
+  userClientSettings: { backgroundColourHex: string },
+  setUserClientSettings: (settings: any) => void
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined)
@@ -93,8 +95,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     })
   }
 
+  const [userClientSettings, setUserClientSettings] = useState({
+    backgroundColourHex: '#ffcc00'
+  })
+
+
   return (
-    <AppContext.Provider value={{ user, courses, setUser, setCourses, login, logout, register }}>
+    <AppContext.Provider value={{ user, courses, setUser, setCourses, login, logout, register, userClientSettings, setUserClientSettings }}>
       {children}
     </AppContext.Provider>
   )

@@ -9,7 +9,7 @@ import Fuse from 'fuse.js'
 import Link from 'next/link'
 
 export default function StudentDashboard() {
-  const { courses } = useAppContext()
+  const { courses, userClientSettings } = useAppContext()
   const [searchTerm, setSearchTerm] = useState('')
   const [filteredCourses, setFilteredCourses] = useState(courses)
 
@@ -45,7 +45,7 @@ export default function StudentDashboard() {
             <h2 className="text-xl font-semibold">{course.title}</h2>
             <p className="text-gray-600">{course.category}</p>
             <p className="text-gray-700">{course.description}</p>
-            <Link href={"/app/course/"+course.slug}>
+            <Link href={"/app/course/"+course.slug+'?bgColour='+userClientSettings.backgroundColourHex.slice(1)}>
               <Button className="mt-2">View Course</Button>
             </Link>
           </div>
