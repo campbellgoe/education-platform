@@ -57,7 +57,7 @@ function NavBar({ pathname, user, logout, type, className = "" }: { pathname: st
           })}>Register</Link>
         </>}
         {user ? <>You: {user.email}<button onClick={logout}>Logout</button></> : null}
-        <ColorPicker value={value} onChange={(e: any) => {
+        {pathname.startsWith("/app/course") ?<ColorPicker value={value} onChange={(e: any) => {
           if (e.target.value.startsWith('#')) {
             setUserClientSettings({ backgroundColourHex: e.target.value })
             router.replace(pathname + '?' + createQueryString('bgColour', e.target.value.slice(1)))
@@ -65,7 +65,7 @@ function NavBar({ pathname, user, logout, type, className = "" }: { pathname: st
             throw "Need hexademical value got " + e.target.value
           }
         }}
-          id="backgroundColourHex" label="" />
+          id="backgroundColourHex" label="" /> : null}
       </nav>
   )
 }
