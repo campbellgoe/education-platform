@@ -1,42 +1,106 @@
-"use client";
-import { Course, useAppContext } from "@/contexts/PersistentAppContext";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react"
+import { notFound } from 'next/navigation'
+import { CustomMDX } from '@/components/mdx'
+import { formatDate } from '@/utils/parse-mdx'
+import { baseUrl } from '@/app/_helpers/shared/config'
+import dbConnect from '@/lib/dbConnect'
+import { Course } from '@/models/Course'
+const getCourses = async () => {
+  await dbConnect()
+  const courses = await Course.find()
+  return courses
+}
+export async function generateStaticParams() {
+  const courses = await getCourses()
 
-export default function CoursePage() {
-  const params = useParams<{ slug: string }>()
-  const { slug } = params
-  const { courses, setCourses } = useAppContext()
-  useEffect(() => {
-   const fetchAllCourses = async () => {
-      const response = await fetch('/api/courses')
-      const {courses} = await response.json()
-      setCourses(courses)
-   }
-   fetchAllCourses()
-   .then(() => console.log('Courses fetched'))
-  }, [setCourses])
-  const [filteredCourses, setFilteredCourses] = useState(courses)
-  const course = filteredCourses[0]
-  useEffect(() => {
-   setFilteredCourses(courses.filter((course: Course) => course.slug === slug))
-  }, [slug, courses])
- 
+  return courses.map((course) => ({
+    slug: course.slug,
+  }))
+}
+
+export async function generateMetadata({ params }: any) {
+  const { slug } = await params
+  const course = (await getCourses()).find((course) => course.slug === slug)
+  if (!course) {
+    return
+  }
+const { title, description, image } = course
+  // const {
+  //   title,
+  //   publishedAt: publishedTime,
+  //   summary: description,
+  //   image,
+  // } = course.metadata
+   const ogImage = image
+     ? image
+     : `${baseUrl}/og?title=${encodeURIComponent(title)}`
+
+  return {
+    // title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'article',
+      publishedTime: course.updatedAt,
+      url: `${baseUrl}/course/${course.slug}`,
+      images: [
+        {
+          url: ogImage,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [ogImage],
+    },
+  }
+}
+
+export default async function Blog({ params }: any) {
+  const { slug } = await params
+  const course = (await getCourses()).find((course) => course.slug === slug)
+
+  if (!course) {
+    notFound()
+  }
 
   return (
-    <div className="rounded shadow-sm bg-yellow-300 mx-auto w-[40ch] md:w-[60ch] p-4">
-      <h1>Course Page</h1>
-      {course ? (
-        <div>
-          <h2>Author: {course.authorName}</h2>
-          <h2>{course.title}</h2>
-          <p>{course.description}</p>
-          <p>{course.category}</p>
-          <pre className="whitespace-pre-wrap">{course.content}</pre>
-        </div>
-      ) : (
-        <p></p>
-      )}
-    </div>
+    <section>
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Course',
+            headline: course.title,
+            // datePublished: course.metadata.publishedAt,
+            // dateModified: course.metadata.publishedAt,
+            description: course.summary,
+            image: course.image
+              ? `${baseUrl}${course.image}`
+              : `/og?title=${encodeURIComponent(course.title)}`,
+            url: `${baseUrl}/blog/${course.slug}`,
+            author: {
+              '@type': 'Person',
+              name: course.authorName,
+            },
+          }),
+        }}
+      />
+      <h1 className="title font-semibold text-2xl tracking-tighter">
+        {course.title}
+      </h1>
+      <div className="flex justify-between items-center mt-2 mb-8 text-sm">
+        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          {formatDate(course.updatedAt.toString())}
+        </p>
+      </div>
+      <article className="prose">
+        <CustomMDX source={course.content} />
+      </article>
+    </section>
   )
 }
