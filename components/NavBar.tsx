@@ -19,6 +19,17 @@ function ColorPicker({ id, name = "color", label = "Colour", onChange, value }: 
     <label htmlFor={id}>{label}</label>
   </div>
 }
+type NavLinkProps = {
+  active: boolean,
+  href: string,
+  label?: string,
+  children?: any;
+}
+const NavLink = ({ active, href, label, children }: NavLinkProps) => {
+  return <Link href={href} className={cn({
+    "underline": active
+  })}>{children || label}</Link>
+}
 function NavBar({ pathname, user, logout, type, className = "" }: { pathname: string, user: AppContextType["user"] | null, logout: (() => void), type?: 'header', className?: string }) {
   const { userClientSettings, setUserClientSettings } = useAppContext()
   const searchParams = useSearchParams()
@@ -39,22 +50,29 @@ function NavBar({ pathname, user, logout, type, className = "" }: { pathname: st
     }
   }, [bgColour, setUserClientSettings])
   const value = bgColour ? '#'+bgColour : userClientSettings.backgroundColourHex
+  const hrefs = [
+    {
+      href: "/app",
+      label: "App"
+    },
+    {
+      href: "/app/login",
+      label: "Login"
+    },
+    {
+      href: "/app/register",
+      label: "Register"
+    }
+  ]
   return (
    !pathname.startsWith('/app') ? null :
       <nav className={clsx("flex justify-evenly text-3xl shadow-md", {
         "flex-col": type !== 'header',
       }, className)}>
-        {user ? <Link href="/app/dashboard" className={cn({
-          "underline": pathname === "/app/dashboard"
-        })}>{capitaliseFirstLetter(user.type)} Dashboard</Link> : <>
-          <Link href="/app" className={cn({
-            "underline": pathname === "/app"
-          })}>Welcome</Link>
-          <Link href="/app/login" className={cn({
-            "underline": pathname === "/app/login"
-          })}>Login</Link><Link href="/app/register" className={cn({
-            "underline": pathname === "/app/register"
-          })}>Register</Link>
+        {/* conditionally render Student dashboard link on dashboard page only if user logged in */}
+        {user ? <NavLink href="/app/dashboard" active={pathname === "/app/dashboard"}>{capitaliseFirstLetter(user.type)} Dashboard</NavLink> : <>
+          {hrefs.map(({href, label}: { href: string, label: string}) => <NavLink href={href} active={pathname === href} label={label}/>
+          )}
         </>}
         {user ? <>You: {user.email}<button onClick={logout}>Logout</button></> : null}
         {pathname.startsWith("/app/course") ?<ColorPicker value={value} onChange={(e: any) => {
