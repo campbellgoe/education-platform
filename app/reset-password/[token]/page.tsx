@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import NavBarMain from '@/components/NavBarMain'
-
+const log = console.log
 export default function ResetPassword({ params }: any) {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -38,8 +38,9 @@ export default function ResetPassword({ params }: any) {
       if (result.success) {
         setTimeout(() => router.push('/app/login'), 3000)
       }
-    } catch (error: any) {
-      setMessage('An error occurred. Please try again. ' + error.message)
+    } catch (_error: any) {
+      log(_error, 'Couldnt reset password')
+      setMessage('An error occurred during reset password attempt.')
     } finally {
       setIsLoading(false)
     }
