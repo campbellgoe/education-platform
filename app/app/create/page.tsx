@@ -19,18 +19,14 @@ export default function CreateCoursePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!user || user.type !== 'teacher') {
-      alert('You must be logged in as a teacher to create a course')
-      return
-    }
 console.log('user:', user)
     const courseData = {
       title,
       description,
       category,
       content,
-      teacherId: user._id,
-      authorName: user.name || 'Unknown',
+      teacherId: user?._id,
+      authorName: user?.name || 'Unknown',
     }
 
     const response = await fetch('/api/courses', {

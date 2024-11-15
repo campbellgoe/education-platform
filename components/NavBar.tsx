@@ -1,6 +1,5 @@
 "use client"
 import { useAppContext, type AppContextType } from '@/contexts/PersistentAppContext'
-import { capitaliseFirstLetter, cn } from '@/lib/utils'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -26,7 +25,7 @@ type NavLinkProps = {
   children?: any;
 }
 const NavLink = ({ active, href, label, children }: NavLinkProps) => {
-  return <Link href={href} className={cn({
+  return <Link href={href} className={clsx({
     "underline": active
   })}>{children || label}</Link>
 }
@@ -70,7 +69,7 @@ function NavBar({ pathname, user, logout, type, className = "" }: { pathname: st
         "flex-col": type !== 'header',
       }, className)}>
         {/* conditionally render Student dashboard link on dashboard page only if user logged in */}
-        {user ? <NavLink href="/app/dashboard" active={pathname === "/app/dashboard"}>{capitaliseFirstLetter(user.type)} Dashboard</NavLink> : <>
+        {user ? <NavLink href="/app/dashboard" active={pathname === "/app/dashboard"}>Your Dashboard</NavLink> : <>
           {hrefs.map(({ href, label }: { href: string, label: string }) => <NavLink key={href} href={href} active={pathname === href} label={label} />
           )}
         </>}

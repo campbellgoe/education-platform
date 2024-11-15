@@ -32,7 +32,7 @@ export type AppContextType = {
   setCourses: (courses: Course[]) => void
   login: (email: string, password: string) => Promise<boolean>
   logout: () => void,
-  register: (name: string, email: string, password: string, userType: string) => Promise<boolean>
+  register: (name: string, email: string, password: string) => Promise<boolean>
   userClientSettings: { backgroundColourHex: string },
   setUserClientSettings: (settings: any) => void
 }
@@ -53,13 +53,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     initializeData()
   }, [])
 
-  const register = async (name: string, email: string, password: string, userType: string): Promise<boolean> => {
+  const register = async (name: string, email: string, password: string): Promise<boolean> => {
     const newUser = await fetch('/api/account/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ name, email, password, type: userType })
+      body: JSON.stringify({ name, email, password })
     }).then(res => res.json())
 
     if(newUser){

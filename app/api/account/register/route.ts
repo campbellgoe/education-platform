@@ -11,7 +11,6 @@ export async function POST(req: Request): Promise<Response> {
     return Response.json(user)
 }
 POST.schema = joi.object({
-    type: joi.string().required(),
     email: joi.string().required(),
     password: joi.string().min(MIN_PASSWORD_LENGTH).required(),
 });

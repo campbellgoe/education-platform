@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -10,24 +10,23 @@ import Fuse from 'fuse.js'
 export default function TeacherDashboard() {
   const { courses, user, userClientSettings } = useAppContext()
   const [searchTerm, setSearchTerm] = useState('')
-  const [filteredCourses, setFilteredCourses] = useState(courses?.filter(course => course.teacherId === user?._id) || [])
+  const teacherCourses = useMemo(() => courses?.filter(course => course.teacherId === user?._id) || [], [courses, user?._id])
+  const [filteredCourses, setFilteredCourses] = useState(teacherCourses)
 
   useEffect(() => {
-    if (!courses) return
+    if (!teacherCourses) return
 
-    const teacherCourses = courses.filter(course => course.teacherId === user?._id)
-
-    if (searchTerm) {
+    if (searchTerm === '' || searchTerm === '*') {
+      setFilteredCourses(teacherCourses)
+    } else {
       const fuse = new Fuse(teacherCourses, {
-        keys: ['title', 'category'],
-        threshold: 0.3,
+        keys: ['title', 'description', 'category', 'content', 'authorName'],
+        threshold: 0.5,
       })
       const results = fuse.search(searchTerm)
       setFilteredCourses(results.map(result => result.item))
-    } else {
-      setFilteredCourses(teacherCourses)
     }
-  }, [searchTerm, courses, user?._id])
+  }, [searchTerm, teacherCourses])
 const bgColour = userClientSettings.backgroundColourHex.slice(1)
   return (
     <div className="p-6">

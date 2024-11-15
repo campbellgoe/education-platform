@@ -39,10 +39,6 @@ const { slug } = params
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!user || user.type !== 'teacher' || user._id !== authorId) {
-      alert('You must be logged in as a teacher who made this course, to edit it')
-      return
-    }
 
     const courseData = {
       title,
@@ -50,7 +46,7 @@ const { slug } = params
       category,
       content,
       teacherId: authorId,
-      authorName: user.name || 'Unknown',
+      authorName: user?.name || 'Unknown',
     }
 
     const response = await fetch(`/api/course/${slug}`, {

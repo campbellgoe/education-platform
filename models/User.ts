@@ -6,8 +6,8 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  type: 'student' | 'teacher';
   enrolledCourses: mongoose.Types.ObjectId[];
+  teacherCourses: mongoose.Types.ObjectId[];
 }
 
 const UserSchema = new mongoose.Schema<IUser>({
@@ -29,12 +29,11 @@ const UserSchema = new mongoose.Schema<IUser>({
     required: [true, 'Please provide a password'],
     minlength: [6, 'Password should be at least 6 characters long'],
   },
-  type: {
-    type: String,
-    enum: ['student', 'teacher'],
-    required: [true, 'Please specify user type'],
-  },
   enrolledCourses: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Course',
+  }],
+  teacherCourses: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Course',
   }],

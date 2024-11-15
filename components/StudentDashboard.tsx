@@ -16,8 +16,8 @@ export default function StudentDashboard() {
   useEffect(() => {
     if (searchTerm) {
       const fuse = new Fuse(courses, {
-        keys: ['title', 'category'],
-        threshold: 0.3,
+        keys: ['title', 'description', 'category', 'content', 'authorName'],
+        threshold: 0.5,
       })
       const results = fuse.search(searchTerm)
       setFilteredCourses(results.map(result => result.item))

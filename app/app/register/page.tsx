@@ -4,16 +4,15 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useAppContext } from '@/contexts/PersistentAppContext'
 import NavBarMain from '@/components/NavBarMain'
 import { useRouter } from 'next/navigation'
+
 export default function Page() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [userType, setUserType] = useState('student')
   const [error, setError] = useState('')
   const { register } = useAppContext()
   const router = useRouter()
@@ -28,7 +27,7 @@ export default function Page() {
     // alert("Not accepting registrations yet. Login with student@example.com or teacher1@example.com to preview your dashboard (logging you in as a "+userType+")")
     // login(userType === 'student' ? "student@example.com" : 'teacher1@example.com', password)
     try {
-      register(name, email, password, userType)
+      register(name, email, password)
       router.push('/app/dashboard')
     } catch(err: any){
       setError(err.message)
@@ -83,19 +82,6 @@ export default function Page() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
-          </div>
-          <div className="mb-6">
-            <Label>User Type</Label>
-            <RadioGroup value={userType} onValueChange={setUserType}>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="student" id="student" />
-                <Label htmlFor="student">Student</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="teacher" id="teacher" />
-                <Label htmlFor="teacher">Teacher</Label>
-              </div>
-            </RadioGroup>
           </div>
           <Button type="submit" className="w-full">Register</Button>
         </form>
