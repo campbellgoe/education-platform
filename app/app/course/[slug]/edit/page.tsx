@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useRef, useState, useEffect, Suspense } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAppContext } from '@/contexts/PersistentAppContext'
 import { Button } from '@/components/ui/button'
@@ -8,7 +8,25 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import NavBarMain from '@/components/NavBarMain'
+import dynamic from 'next/dynamic'
+import { forwardRef } from "react"
+import {
+  type MDXEditorMethods,
+  type MDXEditorProps
+} from '@mdxeditor/editor'
 
+// This is the only place InitializedMDXEditor is imported directly.
+const Editor = dynamic(() => import('@/components/InitializedMDXEditor'), {
+  // Make sure we turn SSR off
+  ssr: false
+})
+
+// This is what is imported by other components. Pre-initialized with plugins, and ready
+// to accept other props, including a ref.
+const MyMDXEditor = forwardRef<MDXEditorMethods, MDXEditorProps>((props, ref) => <Editor {...props} editorRef={ref} />)
+
+// TS complains without the following line
+MyMDXEditor.displayName = 'MyMDXEditor'
 export default function EditCoursePage({ params }: any) {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -77,7 +95,7 @@ const { slug } = params
       }
     }
   }
-
+  const mdxEditorRef = useRef<MDXEditorMethods>(null)
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <NavBarMain type="header" />
@@ -85,7 +103,7 @@ const { slug } = params
         <CardTitle>Edit Course</CardTitle>
       </CardHeader>
       <CardContent>
-        {!!(title && content) ? <form onSubmit={handleSubmit} className="space-y-4">
+        {(typeof content == "string") && <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="title" className="block text-sm font-medium text-gray-700">
               Title
@@ -127,16 +145,27 @@ const { slug } = params
             <Textarea
               id="content"
               value={content}
-              onChange={(e) => setContent(e.target.value)}
               required
+              onChange={(e: any) => {
+                setContent(e.target.value)
+                mdxEditorRef.current?.setMarkdown(e.target.value)
+              }}
               rows={10}
             />
+            <Suspense fallback={null}>
+              <MyMDXEditor
+                ref={mdxEditorRef}
+                markdown={content}
+                onChange={(e: string) => setContent(e)}
+                contentEditableClassName="my-mdx-editor"
+              />
+            </Suspense>
           </div>
           <Button type="submit">Update Course</Button>
           <Button type="button" onClick={handleDelete} className="ml-4 bg-red-600 hover:bg-red-700">
             Delete Course
           </Button>
-        </form>: <div>Loading</div>}
+        </form>}
       </CardContent>
     </Card>
   )
