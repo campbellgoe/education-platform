@@ -1,5 +1,5 @@
 'use client'
-
+import { useParams } from 'next/navigation'
 import { useRef, useState, useEffect, Suspense } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAppContext } from '@/contexts/PersistentAppContext'
@@ -27,7 +27,8 @@ const MyMDXEditor = forwardRef<MDXEditorMethods, MDXEditorProps>((props, ref) =>
 
 // TS complains without the following line
 MyMDXEditor.displayName = 'MyMDXEditor'
-export default function EditCoursePage({ params }: any) {
+export default function EditCoursePage() {
+  const params = useParams<{ slug: string }>()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState('')
