@@ -1,1 +1,2 @@
-declare module 'leaky-bucket'
+declare module 'leaky-bucket';
+declare module 'nodemailer';

@@ -23,6 +23,9 @@ async function authenticate({ email, password }: { email: string, password: stri
         throw 'Email or password is incorrect';
     }
 
+    // if (!user.emailVerified) {
+    //     throw 'Please verify your email before logging in ('+user.email+')'
+    // }
     // create a jwt token that is valid for 4 days
     const token = jwt.sign({ sub: user?.id }, process.env.JWT_SECRET!, { expiresIn: '4d' });
 

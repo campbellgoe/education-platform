@@ -8,6 +8,7 @@ export interface IUser extends Document {
   password: string;
   enrolledCourses: mongoose.Types.ObjectId[];
   teacherCourses: mongoose.Types.ObjectId[];
+  emailVerified: boolean;
 }
 
 const UserSchema = new mongoose.Schema<IUser>({
@@ -37,6 +38,7 @@ const UserSchema = new mongoose.Schema<IUser>({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Course',
   }],
+  emailVerified: { type: Boolean, default: false },
 }, {
   timestamps: true,
 });
