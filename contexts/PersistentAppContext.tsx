@@ -56,9 +56,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const register = async (name: string, email: string, password: string): Promise<boolean> => {
     const newUser = await fetch('/api/account/register', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
       body: JSON.stringify({ name, email, password })
     }).then(res => res.json())
 
