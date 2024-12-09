@@ -1,15 +1,9 @@
-'use client'
 
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+export default function HomePage() {
 
-export default function Page() {
-  const router = useRouter()
-  useEffect(() => {
-    router.push('/app')
-  }, [router])
   return (
-    <Link href="/app">App</Link>
+    <div className="container mx-auto w-[500x]">
+      
+    </div>
   )
 }

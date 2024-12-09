@@ -8,7 +8,7 @@ import { useAppContext } from '@/contexts/PersistentAppContext'
 import Fuse from 'fuse.js'
 import Link from 'next/link'
 
-export default function StudentDashboard() {
+export default function StudentDashboard({ fullArticle = true }) {
   const { courses, userClientSettings } = useAppContext()
   const [searchTerm, setSearchTerm] = useState('')
   const [filteredCourses, setFilteredCourses] = useState(courses)
@@ -28,7 +28,7 @@ export default function StudentDashboard() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Student Dashboard</h1>
+      {fullArticle === true ? <h1 className="text-2xl font-bold mb-4">Student Dashboard</h1> : null}
       <div className="mb-4">
         <Label htmlFor="search">Search Courses</Label>
         <Input 
@@ -44,7 +44,7 @@ export default function StudentDashboard() {
           <div key={course._id} className="border p-4 rounded shadow">
             <h2 className="text-xl font-semibold">{course.title}</h2>
             <p className="text-gray-600">{course.category}</p>
-            <p className="text-gray-700">{course.description}</p>
+            {fullArticle === true && <p className="text-gray-700">{course.description}</p>}
             <Link href={"/app/course/"+course.slug+'?bgColour='+userClientSettings.backgroundColourHex.slice(1)}>
               <Button className="mt-2">View Course</Button>
             </Link>
