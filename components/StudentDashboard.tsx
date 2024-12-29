@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useAppContext } from '@/contexts/PersistentAppContext'
+import { Course, useAppContext } from '@/contexts/PersistentAppContext'
 import Fuse from 'fuse.js'
 import Link from 'next/link'
 
-export default function StudentDashboard({ fullArticle = true }) {
-  const { courses, userClientSettings } = useAppContext()
+export default function StudentDashboard({ fullArticle = true, courses }: any) {
+  const { userClientSettings } = useAppContext()
   const [searchTerm, setSearchTerm] = useState('')
   const [filteredCourses, setFilteredCourses] = useState(courses)
 
@@ -40,7 +40,7 @@ export default function StudentDashboard({ fullArticle = true }) {
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredCourses.map(course => (
+        {filteredCourses.length ? filteredCourses?.map((course: Course) => (
           <div key={course._id} className="border p-4 rounded shadow">
             <h2 className="text-xl font-semibold">{course.title}</h2>
             <p className="text-gray-600">{course.category}</p>
@@ -49,7 +49,7 @@ export default function StudentDashboard({ fullArticle = true }) {
               <Button className="mt-2">View Course</Button>
             </Link>
           </div>
-        ))}
+        )) : <p>No courses found or loading.</p>}
       </div>
     </div>
   )
