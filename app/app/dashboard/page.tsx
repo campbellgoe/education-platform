@@ -45,7 +45,7 @@ setView(localStorage.getItem(localStorageKey) as ViewType || 'student')
             {isTeacherView ? 'Teacher View' : 'Student View'}
           </Label>
         </div>
-        {isTeacherView ? <TeacherDashboard /> : <StudentDashboard courses={courses} isLoading={isLoading}/>}
+        {isTeacherView ? <TeacherDashboard isLoading={isLoading} /> : <StudentDashboard courses={courses} isLoading={isLoading}/>}
       </div>: <p>Loading...</p>}
     </div>
   )

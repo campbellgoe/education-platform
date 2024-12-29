@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, Suspense, useRef } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAppContext } from '@/contexts/PersistentAppContext'
 import { Button } from '@/components/ui/button'
@@ -68,7 +68,6 @@ export default function CreateCoursePage() {
       alert('Failed to create course')
     }
   }
-  const mdxEditorRef = useRef<MDXEditorMethods>(null)
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <NavBarMain type="header" />

@@ -8,7 +8,7 @@ function NavBarMain({ type, className, ...props }: { type?: 'header', className?
   const pathname = usePathname()
   const { user, logout } = useAppContext()
   return (
-    <Suspense fallback={<p>Loaing...</p>}><NavBar user={user} logout={logout} pathname={pathname || ''} type={type === 'header' ? isMobile ? undefined : 'header' : undefined} className={className} {...props}/></Suspense>
+    <Suspense fallback={<p>Loading...</p>}><NavBar user={user} logout={logout} pathname={pathname || ''} type={type === 'header' ? isMobile ? undefined : 'header' : undefined} className={className} {...props}/></Suspense>
   )
 }
 
