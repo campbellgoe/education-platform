@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 export const useFetchAllCourses = (querystring = '') => {
   const [isLoading, setIsLoading] = useState(true);
   const { courses, setCourses } = useAppContext();
-
+const [error, setError] = useState<string>('')
   useEffect(() => {
     const controller = new AbortController();
     const { signal } = controller;
@@ -24,6 +24,7 @@ export const useFetchAllCourses = (querystring = '') => {
           console.error('Fetch error:', error);
         }
         setIsLoading(false);
+        setError("Error occured.")
       }
     };
 
@@ -34,5 +35,5 @@ export const useFetchAllCourses = (querystring = '') => {
     };
   }, [setCourses, querystring]);
 
-  return [courses, isLoading];
+  return [courses, isLoading, [error, setError]];
 };

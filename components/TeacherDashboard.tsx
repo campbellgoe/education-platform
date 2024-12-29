@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useAppContext } from '@/contexts/PersistentAppContext'
 import Fuse from 'fuse.js'
+import clsx from 'clsx'
 
 export default function TeacherDashboard({ isLoading }: any) {
   const { courses, userClientSettings } = useAppContext()
@@ -58,6 +59,10 @@ const bgColour = userClientSettings.backgroundColourHex.slice(1)
             <Link href={"/app/course/"+course.slug+'?bgColour='+bgColour}>
             <Button className="mt-2">View Course</Button>
           </Link>
+          <p className={clsx('rounded mt-2 p-1 max-w-[12ch]', {
+            'text-red-500 bg-red-100': !course.isPublished,
+            'text-green-500 bg-green-100': course.isPublished,
+          })}>{course.isPublished ? 'Published' : 'Not Published'}</p>
           </div>
           ))}
         </div>
