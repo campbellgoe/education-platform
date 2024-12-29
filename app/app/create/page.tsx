@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { useAppContext } from '@/contexts/PersistentAppContext'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -43,7 +43,7 @@ export default function CreateCoursePage() {
       category,
       content:'',
       teacherId: user?._id,
-      authorName: user?.name || 'Unknown',
+      authorName: user?.name || '',
       isPublished: false,
     }
 
@@ -68,6 +68,7 @@ export default function CreateCoursePage() {
       alert('Failed to create course')
     }
   }
+  if(!user) return redirect('/app/login')
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <NavBarMain type="header" />

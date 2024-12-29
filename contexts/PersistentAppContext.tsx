@@ -23,6 +23,7 @@ export type Course = {
   slug: string
   content: string
   updatedAt: string
+  isPublished: boolean
 }
 
 export type AppContextType = {
