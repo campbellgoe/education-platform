@@ -31,7 +31,7 @@ export default function CreateCoursePage() {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState('')
-  const [content, setContent] = useState('')
+  // const [content, setContent] = useState('')
   const router = useRouter()
   const { user } = useAppContext()
 
@@ -41,9 +41,10 @@ export default function CreateCoursePage() {
       title,
       description,
       category,
-      content,
+      content:'',
       teacherId: user?._id,
       authorName: user?.name || 'Unknown',
+      isPublished: false,
     }
 
     const response = await fetch('/api/courses', {
@@ -55,7 +56,14 @@ export default function CreateCoursePage() {
     })
 
     if (response.ok) {
-      router.push('/app/dashboard')
+     alert("Course created... finding slug and url to edit the content with an MDX editor")
+     const resJson = await response.json()
+     if(resJson.slug){
+       router.push('/app/course/'+resJson.slug+"/edit")
+     } else {
+       alert("Something went wrong and can't figure out where the course edit page is automatically. "+resJson.slug)
+     }
+      
     } else {
       alert('Failed to create course')
     }
@@ -99,7 +107,7 @@ export default function CreateCoursePage() {
             <Input type="text" value={category} onChange={(e) => setCategory(e.target.value)}/>
              
           </div>
-          <div>
+          {/* <div>
             <label htmlFor="content" className="block text-sm font-medium text-gray-700">
               Course Content (MDX)
             </label>
@@ -121,7 +129,7 @@ export default function CreateCoursePage() {
                 contentEditableClassName="my-mdx-editor"
               />
             </Suspense>
-          </div>
+          </div> */}
           <Button type="submit">Create Course</Button>
         </form>
       </CardContent>

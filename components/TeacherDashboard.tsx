@@ -52,7 +52,7 @@ const bgColour = userClientSettings.backgroundColourHex.slice(1)
             <div key={course._id} className="border p-4 rounded shadow">
             <h3 className="text-lg font-semibold">{course.title}</h3>
             <p className="text-gray-600">{course.category}</p>
-            <Link href={`/app/course/${course.slug}/edit?bgColour=${bgColour}`}>
+            <Link href={`/app/course/${course.slug}/edit?bgColour=${bgColour}`} className="mr-8">
               <Button className="mt-2">Edit Course</Button>
             </Link>
             <Link href={"/app/course/"+course.slug+'?bgColour='+bgColour}>

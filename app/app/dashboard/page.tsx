@@ -8,10 +8,11 @@ import TeacherDashboard from '@/components/TeacherDashboard'
 import NavBarMain from '@/components/NavBarMain'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
+import { useFetchAllCourses } from '@/hooks/useHooks'
 type ViewType = 'student' | 'teacher' | null
 const localStorageKey = 'phiedtech.dashboard.view'
 export default function Dashboard() {
-  const { user, setCourses } = useAppContext()
+  const { user } = useAppContext()
   const router = useRouter()
   const [view, setView] = useState<ViewType>(null)
 useEffect(() => {
@@ -25,18 +26,9 @@ setView(localStorage.getItem(localStorageKey) as ViewType || 'student')
       router.push('/app/login')
     }
   }, [user, router])
-
-  useEffect(() => {
-    if(!user) return
-   const fetchAllCourses = async () => {
-      const response = await fetch('/api/courses')
-      const {courses} = await response.json()
-      setCourses(courses)
-   }
-   fetchAllCourses()
-   .then(() => console.log('Courses fetched'))
-  }, [user, setCourses])
   const isTeacherView = view === 'teacher'
+  const qs = (isTeacherView && user?._id) ? '?teacherId='+user._id : ''
+  const [courses, isLoading] = useFetchAllCourses(isTeacherView ? qs : '')
   const toggleView = () => {
     setView(isTeacherView ? 'student' : 'teacher')
   }
@@ -46,15 +38,15 @@ setView(localStorage.getItem(localStorageKey) as ViewType || 'student')
   return (
     <div>
       <NavBarMain type="header" className="bg-yellow-300"/>
-      <div className="p-4">
+      {view ? <div className="p-4">
         <div className="flex items-center space-x-2 mb-4">
           <Switch id="view-toggle" checked={isTeacherView} onCheckedChange={toggleView} />
           <Label htmlFor="view-toggle">
             {isTeacherView ? 'Teacher View' : 'Student View'}
           </Label>
         </div>
-        {isTeacherView ? <TeacherDashboard /> : <StudentDashboard />}
-      </div>
+        {isTeacherView ? <TeacherDashboard /> : <StudentDashboard courses={courses} isLoading={isLoading}/>}
+      </div>: <p>Loading...</p>}
     </div>
   )
 }

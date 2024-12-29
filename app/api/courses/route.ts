@@ -2,7 +2,9 @@
 import { Course } from '@/models/Course'
 import dbConnect from '@/lib/dbConnect'
 import { slugify } from '@/utils/slugify'
-export async function GET() {
+import { NextRequest } from 'next/server'
+
+export async function GET(request: NextRequest) {
   try {
     await dbConnect()
   } catch(err){
@@ -11,7 +13,13 @@ export async function GET() {
   }
 
   try {
-    const courses = await Course.find()
+    const teacherId = request.nextUrl.searchParams.get("teacherId")
+    let courses
+    if(teacherId){
+      courses = await Course.find({ teacherId })
+    } else {
+      courses = await Course.find({ isPublished: true})
+    }
     return Response.json({ courses })
   } catch(err) {
     console.error('Error fetching courses:', err)
@@ -20,8 +28,9 @@ export async function GET() {
 }
 export async function POST(request: Request) {
   try {
-    const { title, description, category, content, teacherId, authorName} = await request.json()
-console.log('title:', title, 'description:', description, 'category:', category, 'content:', content, 'teacherId:', teacherId)
+    const { title, description, category, content, teacherId, authorName, isPublished } = await request.json()
+    const slug = slugify(title)
+console.log('title:', title, 'description:', description, 'category:', category, 'teacherId:', teacherId, 'isPublished', isPublished, 'slug', slug)
     
 try {
   await dbConnect()
@@ -29,7 +38,6 @@ try {
   console.error('Failed to connect to database:', err)
   return Response.json({ error: 'Failed to connect' }, { status: 500 })
 }
-
     try {
     const newCourse = new Course({
       title,
@@ -38,12 +46,13 @@ try {
       content,
       teacherId,
       authorName,
-      slug: slugify(title),
+      slug,
+      isPublished,
     })
 
     await newCourse.save()
 
-    return Response.json({ message: 'Course created successfully', course: newCourse }, { status: 201 })
+    return Response.json({ message: 'Course created successfully', course: newCourse, slug }, { status: 201 })
   } catch(err) {
     console.error('Error creating course:', err)
     return Response.json({ error: 'Failed to create course' }, { status: 500 })

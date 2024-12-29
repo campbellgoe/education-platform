@@ -3,20 +3,10 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import StudentDashboard from '@/components/StudentDashboard'
-import { useAppContext } from '@/contexts/PersistentAppContext'
-import { useEffect } from 'react'
+import { useFetchAllCourses } from '@/hooks/useHooks'
 
 export default function Page() {
-  const { user, setCourses } = useAppContext()
-  useEffect(() => {
-   const fetchAllCourses = async () => {
-      const response = await fetch('/api/courses')
-      const {courses} = await response.json()
-      setCourses(courses)
-   }
-   fetchAllCourses()
-   .then(() => console.log('Courses fetched'))
-  }, [setCourses])
+  const [courses, isLoading] = useFetchAllCourses()
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-yellow-300">
       <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
@@ -26,7 +16,7 @@ export default function Page() {
         <p className="mt-3 text-2xl">
           Learn or teach, the choice is yours!
         </p>
-        <StudentDashboard fullArticle={false} />
+        <StudentDashboard fullArticle={false} courses={courses} isLoading={isLoading}/>
         <div className="flex mt-6">
           <Link href="/app/login" className="mr-4">
             <Button>Login</Button>

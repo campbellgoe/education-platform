@@ -20,11 +20,11 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
 export async function PUT(request: Request, { params }: { params: Promise<{ slug: string }> }) {
   try {
     const { slug } = await params
-    const { title, description, category, content, teacherId, authorName } = await request.json()
+    const { title, description, category, content, teacherId, authorName, isPublished } = await request.json()
     await dbConnect()
     const updatedCourse = await Course.findOneAndUpdate(
       { slug },
-      { title, description, category, content, teacherId, authorName, slug: slugify(title) },
+      { title, description, category, content, teacherId, authorName, slug: slugify(title) , isPublished },
       { upsert: true }
     )
     if (!updatedCourse) {

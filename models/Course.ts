@@ -21,7 +21,7 @@ const CourseSchema = new mongoose.Schema({
   },
   content: {
     type: String,
-    required: true,
+    required: false,
   },
   teacherId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -32,14 +32,12 @@ const CourseSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
+  isPublished: {
+    type: Boolean,
+    default: false,
+  }
+}, {
+  timestamps: true
 })
 
 export const Course = mongoose.models.Course || mongoose.model('Course', CourseSchema)
