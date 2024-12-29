@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -8,9 +8,9 @@ import { useAppContext } from '@/contexts/PersistentAppContext'
 import Fuse from 'fuse.js'
 
 export default function TeacherDashboard({ isLoading }: any) {
-  const { courses, user, userClientSettings } = useAppContext()
+  const { courses, userClientSettings } = useAppContext()
   const [searchTerm, setSearchTerm] = useState('')
-  const teacherCourses = useMemo(() => courses?.filter(course => course.teacherId === user?._id) || [], [courses, user?._id])
+  const teacherCourses = courses;//useMemo(() => courses?.filter(course => course.teacherId === user?._id) || [], [courses, user?._id])
   const [filteredCourses, setFilteredCourses] = useState(teacherCourses)
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const bgColour = userClientSettings.backgroundColourHex.slice(1)
       <div className="mt-6">
         <h2 className="text-xl font-semibold mb-2">Your Courses</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredCourses.map(course => (
+          {filteredCourses?.map(course => (
             <div key={course._id} className="border p-4 rounded shadow">
             <h3 className="text-lg font-semibold">{course.title}</h3>
             <p className="text-gray-600">{course.category}</p>

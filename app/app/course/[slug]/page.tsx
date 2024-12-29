@@ -8,7 +8,7 @@ import NavBarMain from '@/components/NavBarMain'
 import { textColorBasedOnBackgroundHexadecimal } from '@/lib/utils'
 const getCourses = async () => {
   await dbConnect()
-  const courses = await Course.find({ isPublished: true })
+  const courses = await Course.find()
   return courses
 }
 export async function generateStaticParams() {
