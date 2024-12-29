@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { useAppContext } from '@/contexts/PersistentAppContext'
 import Fuse from 'fuse.js'
 
-export default function TeacherDashboard() {
+export default function TeacherDashboard({ isLoading }: any) {
   const { courses, user, userClientSettings } = useAppContext()
   const [searchTerm, setSearchTerm] = useState('')
   const teacherCourses = useMemo(() => courses?.filter(course => course.teacherId === user?._id) || [], [courses, user?._id])
@@ -61,9 +61,7 @@ const bgColour = userClientSettings.backgroundColourHex.slice(1)
           </div>
           ))}
         </div>
-        {filteredCourses.length === 0 && (
-          <p className="text-center text-gray-600 mt-4">No courses found. Try a different search term or create a new course.</p>
-        )}
+        {isLoading ? <p className="text-center text-gray-600 mt-4">Loading courses</p> : filteredCourses.length === 0 ? <p className="text-center text-gray-600 mt-4">No courses found. Try a different search term or create a new course.</p> : null}
       </div>
     </div>
   )
