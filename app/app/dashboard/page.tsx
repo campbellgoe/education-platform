@@ -28,7 +28,7 @@ setView(localStorage.getItem(localStorageKey) as ViewType || 'student')
   }, [user, router])
   const isTeacherView = view === 'teacher'
   const qs = (isTeacherView && user?._id) ? '?teacherId='+user._id : ''
-  const courses = useFetchAllCourses(isTeacherView ? qs : '')
+  const [courses, isLoading] = useFetchAllCourses(isTeacherView ? qs : '')
   const toggleView = () => {
     setView(isTeacherView ? 'student' : 'teacher')
   }
@@ -45,7 +45,7 @@ setView(localStorage.getItem(localStorageKey) as ViewType || 'student')
             {isTeacherView ? 'Teacher View' : 'Student View'}
           </Label>
         </div>
-        {isTeacherView ? <TeacherDashboard /> : <StudentDashboard courses={courses} />}
+        {isTeacherView ? <TeacherDashboard /> : <StudentDashboard courses={courses} isLoading={isLoading}/>}
       </div>: <p>Loading...</p>}
     </div>
   )

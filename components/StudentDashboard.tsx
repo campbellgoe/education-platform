@@ -8,7 +8,7 @@ import { Course, useAppContext } from '@/contexts/PersistentAppContext'
 import Fuse from 'fuse.js'
 import Link from 'next/link'
 
-export default function StudentDashboard({ fullArticle = true, courses }: any) {
+export default function StudentDashboard({ fullArticle = true, courses, isLoading }: any) {
   const { userClientSettings } = useAppContext()
   const [searchTerm, setSearchTerm] = useState('')
   const [filteredCourses, setFilteredCourses] = useState(courses)
@@ -49,7 +49,7 @@ export default function StudentDashboard({ fullArticle = true, courses }: any) {
               <Button className="mt-2">View Course</Button>
             </Link>
           </div>
-        )) : <p>No courses found or loading.</p>}
+        )) : isLoading ? <p>Loading courses</p> : <p>No courses found.</p>}
       </div>
     </div>
   )
