@@ -10,11 +10,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import NavBarMain from '@/components/NavBarMain'
 import dynamic from 'next/dynamic'
 import { forwardRef } from "react"
+
+import { Switch } from '@/components/ui/switch'
 import {
   type MDXEditorMethods,
   type MDXEditorProps
 } from '@mdxeditor/editor'
-
 // This is the only place InitializedMDXEditor is imported directly.
 const Editor = dynamic(() => import('@/components/InitializedMDXEditor'), {
   // Make sure we turn SSR off
@@ -34,6 +35,7 @@ export default function EditCoursePage() {
   const [category, setCategory] = useState('')
   const [content, setContent] = useState('')
   const [authorId, setAuthorId] = useState('')
+  const [isPublished, setIsPublished] = useState(false)
   const router = useRouter()
   const { user } = useAppContext()
 const { slug } = params
@@ -48,6 +50,7 @@ const { slug } = params
         setCategory(course.category)
         setContent(course.content)
         setAuthorId(course.teacherId)
+        setIsPublished(course.isPublished || false)
       } else {
         console.error('Failed to fetch course')
         // error
@@ -66,6 +69,7 @@ const { slug } = params
       content,
       teacherId: authorId,
       authorName: user?.name || 'Unknown',
+      isPublished
     }
 
     const response = await fetch(`/api/course/${slug}`, {
@@ -161,6 +165,14 @@ const { slug } = params
                 contentEditableClassName="my-mdx-editor"
               />
             </Suspense>
+          </div>
+          <div>
+            <label htmlFor="is-published" className="block text-sm font-medium tex-gray-700">
+              Publish it?
+            </label>
+            <Switch checked={isPublished} onCheckedChange={(checked: boolean) => {
+              setIsPublished(checked)
+            }} />
           </div>
           <Button type="submit">Update Course</Button>
           <Button type="button" onClick={handleDelete} className="ml-4 bg-red-600 hover:bg-red-700">

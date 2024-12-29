@@ -29,7 +29,7 @@ setView(localStorage.getItem(localStorageKey) as ViewType || 'student')
   useEffect(() => {
     if(!user) return
    const fetchAllCourses = async () => {
-      const response = await fetch('/api/courses')
+      const response = await fetch('/api/courses?teacherId='+user._id)
       const {courses} = await response.json()
       setCourses(courses)
    }
