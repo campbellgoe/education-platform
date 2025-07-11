@@ -1,8 +1,6 @@
 # notes
 
-there are currently two types of user, a student or a teacher, and they can only be one or the other for a given email address.
-
-currently it uses dummy data, i plan to implement the backend and link it to this frontend so that users will be able to create course content and view it.
+register as to be able to create courses on this platform. students can enroll for free.
 
 this is a nextjs project so requires `node` (`nodejs`) v22.x.x and `npm` v10.x.x
 
